@@ -10,7 +10,9 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "ipykernel>=7.4.0",
     "marimo[lsp]>=0.25.1",
+    "nbformat>=5.11.1",
     "ruff>=0.17.0",
     "ty>=0.0.86",
 ]
