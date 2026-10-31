@@ -7,26 +7,36 @@
 
 import marimo
 
-__generated_with = "0.24.2"
+__generated_with = "0.25.2"
 app = marimo.App()
-
-
-@app.function
-def build_string(string_arr: list[str], joiner: str) -> str:
-	return joiner.join(string_arr)
 
 
 @app.cell
 def _():
-    string = build_string(["abc", "def"], "-")
-    return (string,)
+    import sys
+
+    # add root dir as import path: https://stackoverflow.com/a/35273613
+    module_path = "/workspace"
+    if module_path not in sys.path:
+        sys.path.append(module_path)
+
+    sys.path
+    return
 
 
 @app.cell
-def _(string):
+def _():
+    from helpers.my_print import my_print
+
+    my_print()
+    return (my_print,)
+
+
+@app.cell
+def _(my_print):
     from typing import reveal_type
 
-    reveal_type(string)
+    reveal_type(my_print)
     return
 
 
