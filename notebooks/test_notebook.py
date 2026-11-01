@@ -26,17 +26,19 @@ def _():
 
 @app.cell
 def _():
-    from helpers.my_print import my_print
+    from typing import reveal_type, cast
 
-    my_print()
-    return (my_print,)
+    reveal_type("abc")
+    cast(str, "abc")
+    return
 
 
 @app.cell
-def _(my_print):
-    from typing import reveal_type
+def _():
+    from helpers.checked_cast import ccast
 
-    reveal_type(my_print)
+    lol = ccast(str, "abc")
+    lol
     return
 
 
