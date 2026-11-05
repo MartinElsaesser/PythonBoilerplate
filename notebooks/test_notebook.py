@@ -42,5 +42,17 @@ def _():
     return
 
 
+@app.cell
+def _():
+    import torch
+    torch.cuda.is_available()
+    return
+
+
+@app.cell
+def _():
+    return
+
+
 if __name__ == "__main__":
     app.run()
