@@ -1,14 +1,14 @@
 FROM nvidia/cuda:13.4.3-base-ubuntu26.04
 
+
 USER root
+
+
 RUN <<EOF
-##
 ## General apt deps
-##
 apt update && apt install -y graphviz libglu1-mesa-dev freeglut3-dev mesa-common-dev curl sudo git language-pack-en-base
-##
+
 ## password less sudo for ubuntu
-##
 # add ubuntu to sudo group
 usermod -aG sudo ubuntu
 # remove password for ubuntu
@@ -18,25 +18,24 @@ echo "ubuntu ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ubuntu && chmod 0440 /etc/
 EOF
 
 
-
 USER ubuntu
+
+
 ENV UV_PYTHON_CACHE_DIR=/home/ubuntu/.cache/uv
+
+
 ENV FNM_PATH=/home/ubuntu/.local/share/fnm
 
 
-
 RUN <<EOF
-##
 ## Installing UV: https://docs.astral.sh/uv/getting-started/installation/
-##
 curl -LsSf https://astral.sh/uv/0.11.8/install.sh | sh
 echo 'eval "$(uv generate-shell-completion bash)"' >> ~/.bashrc
 echo 'eval "$(uvx --generate-shell-completion bash)"' >> ~/.bashrc
 
-##
 ## Installing fnm (node version manager): https://github.com/schniz/fnm
-##
 curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
+
 # adding fnm to bashrc
 cat <<'NESTED_EOF' >> ~/.bashrc
 # fnm
@@ -46,9 +45,7 @@ if [ -d "$FNM_PATH" ]; then
 fi
 NESTED_EOF
 
-
 EOF
-
 
 
 # persist directories between rebuilds
@@ -56,8 +53,9 @@ RUN <<EOF
 mkdir -p /home/ubuntu/.cache/uv			# uv cache dir: https://docs.astral.sh/uv/guides/integration/docker/#caching
 mkdir -p /home/ubuntu/.local/share/fnm	# cache fnm installation: https://github.com/schniz/fnm#parameters
 EOF
+
+
 # RUN mkdir -p /workspaces/DeepLearning/.venv
 VOLUME ["/home/ubuntu/.cache/uv", "/home/ubuntu/.local/share/fnm"]
-
 
 # TODO: cache /workspace/.venv
