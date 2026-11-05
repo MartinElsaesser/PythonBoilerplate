@@ -1,8 +1,29 @@
-FROM mcr.microsoft.com/devcontainers/base:ubuntu
+FROM nvidia/cuda:13.4.3-base-ubuntu26.04
 
-USER vscode
-ENV UV_PYTHON_CACHE_DIR=/home/vscode/.cache/uv
-ENV FNM_PATH=/home/vscode/.local/share/fnm
+USER root
+RUN <<EOF
+##
+## General apt deps
+##
+apt update && apt install -y graphviz libglu1-mesa-dev freeglut3-dev mesa-common-dev curl sudo git language-pack-en-base
+##
+## password less sudo for ubuntu
+##
+# add ubuntu to sudo group
+usermod -aG sudo ubuntu
+# remove password for ubuntu
+passwd -d ubuntu
+# disable sudo password prompt
+echo "ubuntu ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ubuntu && chmod 0440 /etc/sudoers.d/ubuntu
+EOF
+
+
+
+USER ubuntu
+ENV UV_PYTHON_CACHE_DIR=/home/ubuntu/.cache/uv
+ENV FNM_PATH=/home/ubuntu/.local/share/fnm
+
+
 
 RUN <<EOF
 ##
@@ -25,11 +46,6 @@ if [ -d "$FNM_PATH" ]; then
 fi
 NESTED_EOF
 
-##
-## General apt deps
-##
-
-sudo apt update && sudo apt install -y graphviz libglu1-mesa-dev freeglut3-dev mesa-common-dev
 
 EOF
 
@@ -37,11 +53,11 @@ EOF
 
 # persist directories between rebuilds
 RUN <<EOF
-mkdir -p /home/vscode/.cache/uv			# uv cache dir: https://docs.astral.sh/uv/guides/integration/docker/#caching
-mkdir -p /home/vscode/.local/share/fnm	# cache fnm installation: https://github.com/schniz/fnm#parameters
+mkdir -p /home/ubuntu/.cache/uv			# uv cache dir: https://docs.astral.sh/uv/guides/integration/docker/#caching
+mkdir -p /home/ubuntu/.local/share/fnm	# cache fnm installation: https://github.com/schniz/fnm#parameters
 EOF
 # RUN mkdir -p /workspaces/DeepLearning/.venv
-VOLUME ["/home/vscode/.cache/uv", "/home/vscode/.local/share/fnm"]
+VOLUME ["/home/ubuntu/.cache/uv", "/home/ubuntu/.local/share/fnm"]
 
 
 # TODO: cache /workspace/.venv

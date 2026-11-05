@@ -4,12 +4,13 @@
         "context": "."
     },
     "runArgs": [
-        "--security-opt=label=disable"
+        "--security-opt=label=disable",
+        "--gpus=all"
     ],
     "postCreateCommand": "fnm use --install-if-missing; uv sync",
     "mounts": [
-        "source=uv-cache,target=/home/vscode/.cache/uv,type=volume",
-        "source=fnm,target=/home/vscode/.local/share/fnm,type=volume"
+        "source=uv-cache,target=/home/ubuntu/.cache/uv,type=volume",
+        "source=fnm,target=/home/ubuntu/.local/share/fnm,type=volume"
     ],
     "customizations": {
         // Configure properties specific to VS Code.
@@ -37,5 +38,5 @@
     },
     "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
     "workspaceFolder": "/workspace",
-    "remoteUser": "vscode"
+    "remoteUser": "ubuntu"
 }
