@@ -5,8 +5,10 @@
     },
     "runArgs": [
         "--security-opt=label=disable",
-        "--gpus=all"
     ],
+    "hostRequirements": {
+        "gpu": "optional"
+    },
     "postCreateCommand": "fnm use --install-if-missing; uv sync",
     "mounts": [
         "source=uv-cache,target=/home/ubuntu/.cache/uv,type=volume",
